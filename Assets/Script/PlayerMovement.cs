@@ -13,6 +13,11 @@ public class PlayerMovement : MonoBehaviour
     private bool isJumpingRIGHT;
     public bool isOnLeftWall;
     private bool isJumpingLEFT;
+    public float timerJump = 0f;
+    public bool jumpedRIGHT = false;
+    public bool jumpedLEFT = false;
+    public bool canJumpRIGHT = true;
+    public bool canJumpLEFT = true;
 
     public Transform groundCheckLeft;
     public Transform groundCheckRight;
@@ -35,6 +40,32 @@ public class PlayerMovement : MonoBehaviour
         {
             wantsJumping = true;
         }
+
+        if (jumpedRIGHT)
+        {
+            timerJump += Time.deltaTime;
+            canJumpRIGHT = false;
+
+            if (timerJump > 0.5f) 
+            {
+                jumpedRIGHT = false;
+                canJumpRIGHT = true;
+                timerJump = 0f;
+            }
+        }
+
+        if (jumpedLEFT)
+        {
+            timerJump += Time.deltaTime;
+            canJumpLEFT = false;
+
+            if (timerJump > 0.5f)
+            {
+                jumpedLEFT = false;
+                canJumpLEFT = true;
+                timerJump = 0f;
+            }
+        }
     }
     void FixedUpdate()
     {
@@ -56,14 +87,14 @@ public class PlayerMovement : MonoBehaviour
         }
 
 // Wants to wall jump RIGHT
-        if (wantsJumping && isOnRightWall)
+        if (wantsJumping && isOnRightWall && canJumpRIGHT)
         {
             isJumpingRIGHT = true;
             wantsJumping = false;
         }
 
 // Wants to wall jump LEFT
-        if (wantsJumping && isOnLeftWall)
+        if (wantsJumping && isOnLeftWall && canJumpLEFT)
         {
             isJumpingLEFT = true;
             wantsJumping = false;
@@ -94,15 +125,17 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(new Vector2(0f, jumpForce));
             isJumping = false;
         }
-        if (isJumpingRIGHT)
+        if (isJumpingRIGHT && canJumpRIGHT)
         {
             rb.AddForce(new Vector2(-jumpForce, jumpForce));
             isJumpingRIGHT = false;
+            jumpedRIGHT = true;
         }
-        if (isJumpingLEFT)
+        if (isJumpingLEFT && canJumpLEFT)
         {
             rb.AddForce(new Vector2(jumpForce, jumpForce));
             isJumpingLEFT = false;
+            jumpedLEFT = true;
         }
 
     }
