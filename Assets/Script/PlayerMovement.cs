@@ -1,5 +1,19 @@
 using UnityEngine;
 
+
+/// <summary>
+/// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// 
+/// 
+/// - A regler :
+/// 
+///     Climb qui fait l'ascenseur : Vecteur translate "dir" pas en cause
+/// 
+/// 
+/// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// </summary>
+
+
 public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed;
@@ -18,6 +32,10 @@ public class PlayerMovement : MonoBehaviour
     public bool jumpedLEFT = false;
     public bool canJumpRIGHT = true;
     public bool canJumpLEFT = true;
+    public bool canClimb = false;
+
+    public float vertical;
+
 
     public Transform groundCheckLeft;
     public Transform groundCheckRight;
@@ -35,6 +53,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        vertical = Input.GetAxis("Vertical");
+
 // Check jump
         if (Input.GetButtonDown("Jump") && !isJumping)
         {
@@ -70,11 +90,28 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
 // Check if grounded
-        isGrounded = Physics2D.OverlapArea(groundCheckLeft.position, groundCheckRight.position);
+        if (!canClimb)
+        {
+            isGrounded = Physics2D.OverlapArea(groundCheckLeft.position, groundCheckRight.position);
+        }
 
 // Check if touching wall
         isOnLeftWall = Physics2D.OverlapArea(wallCheckLeftUp.position, wallCheckLeftDown.position);
         isOnRightWall = Physics2D.OverlapArea(wallCheckRightUp.position, wallCheckRightDown.position);
+
+// Wall climb
+
+        Vector2 zeroY = new Vector2(rb.velocity.x, 0);
+        Debug.Log(zeroY);
+
+        if (canClimb)
+        {
+            rb.velocity = zeroY;
+            Vector2 dir = new Vector2(0f, (Input.GetAxis("Vertical")) / 10 );
+            Debug.Log(dir);
+            transform.Translate(dir);
+
+        }
 
 // Variable horinzontal movement
         float horizontalMovement = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
@@ -114,7 +151,7 @@ public class PlayerMovement : MonoBehaviour
 // Move player function
     void MovePlayer(float _horizontalMovement)
     {
-        if ((!isOnRightWall && !isOnLeftWall) || isGrounded)
+        if ((!isOnRightWall && !isOnLeftWall) || isGrounded )
         {
             Vector3 targetVelocity = new Vector2(_horizontalMovement, rb.velocity.y);
             rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref velocity, .05f);
@@ -152,4 +189,16 @@ public class PlayerMovement : MonoBehaviour
             spriteRenderer.flipX = true;
         }
     }
- }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.transform.CompareTag("Climb"))
+            rb.gravityScale = 0;
+        canClimb = true;
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.transform.CompareTag("Climb"))
+            rb.gravityScale = baseGravityScale;
+        canClimb = false;
+    }
+}

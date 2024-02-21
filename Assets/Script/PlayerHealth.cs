@@ -8,6 +8,7 @@ public class PlayerHealth : MonoBehaviour
 
     public HealthBar healthbar;
     public Transform player;
+    public SpriteRenderer sprite;
 
     private bool takeDmg;
     private bool timerOn = false;
@@ -39,6 +40,14 @@ public class PlayerHealth : MonoBehaviour
         {
             canTakeDmg = false;
             timerDmg += Time.deltaTime;
+            if (timerDmg%0.25f >= 0.12f)
+            {
+                sprite.color = new Color(255, 255, 255, 0);
+            }
+            else
+            {
+                sprite.color = new Color(255, 255, 255, 255);
+            }
             if (timerDmg > 1f)
             {
                 canTakeDmg = true;
