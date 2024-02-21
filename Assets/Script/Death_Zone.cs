@@ -2,9 +2,6 @@ using UnityEngine;
 
 public class Death_Zone : MonoBehaviour
 {
-
-    public int damageOnCollision = 1000000;
-
     void Start()
     {
 
@@ -20,7 +17,7 @@ public class Death_Zone : MonoBehaviour
         if (collision.transform.CompareTag("Player"))
         {
             PlayerHealth playerHealth = collision.transform.GetComponent<PlayerHealth>();
-            playerHealth.TakeDamage(damageOnCollision);
+            playerHealth.DeathZone();
         }
     }
 }

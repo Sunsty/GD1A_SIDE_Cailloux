@@ -36,7 +36,7 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
 // Check jump
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && !isJumping)
         {
             wantsJumping = true;
         }
@@ -114,7 +114,7 @@ public class PlayerMovement : MonoBehaviour
 // Move player function
     void MovePlayer(float _horizontalMovement)
     {
-        if (!isOnRightWall && !isOnLeftWall || isGrounded)
+        if ((!isOnRightWall && !isOnLeftWall) || isGrounded)
         {
             Vector3 targetVelocity = new Vector2(_horizontalMovement, rb.velocity.y);
             rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref velocity, .05f);

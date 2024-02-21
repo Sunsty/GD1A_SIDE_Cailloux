@@ -1,3 +1,4 @@
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
@@ -8,6 +9,12 @@ public class PlayerHealth : MonoBehaviour
     public HealthBar healthbar;
     public Transform player;
 
+    private bool takeDmg;
+    private bool timerOn = false;
+    public bool canTakeDmg = true;
+    public float timerDmg = 0f;
+
+    private int dmg;
     private Vector2 spawnPoint = Vector2.zero;
 
     void Start()
@@ -18,27 +25,53 @@ public class PlayerHealth : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(spawnPoint);
-
-        if(Input.GetKeyDown(KeyCode.H))
+        if (takeDmg && canTakeDmg)
         {
-            TakeDamage(5);
+
+        timerOn = true;
+        currentHealth -= dmg;
+        healthbar.SetHealth(currentHealth);
+        takeDmg = false;
+
         }
 
-        if(currentHealth <= 0)
+        if (timerOn)
         {
-            player.position = spawnPoint;
-            currentHealth = maxHealth;
-            healthbar.SetHealth(currentHealth);
+            canTakeDmg = false;
+            timerDmg += Time.deltaTime;
+            if (timerDmg > 1f)
+            {
+                canTakeDmg = true;
+                timerOn = false;
+                timerDmg = 0f;
+            }
+        }
+
+        if (takeDmg)
+        {
+            takeDmg = false;
+        }
+
+        if (currentHealth <= 0)
+        {
+
+        player.position = spawnPoint;
+        currentHealth = maxHealth;
+        healthbar.SetHealth(currentHealth);
+
         }
     }
 
     public void TakeDamage(int damage)
     {
-        currentHealth -= damage;
-        healthbar.SetHealth(currentHealth);
+        dmg = damage;
+        takeDmg = true;
     }
 
+    public void DeathZone()
+    {
+        currentHealth = 0;
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Checkpoint"))
