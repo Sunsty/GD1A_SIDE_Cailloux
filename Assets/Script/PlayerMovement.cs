@@ -19,9 +19,10 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed;
     public float jumpForce;
     public float baseGravityScale;
+    public float wallJumpCD;
 
     private bool isJumping;
-    private bool wantsJumping;
+    public bool wantsJumping;
     public bool isGrounded;
     public bool isOnRightWall;
     private bool isJumpingRIGHT;
@@ -53,10 +54,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+
         vertical = Input.GetAxis("Vertical");
 
 // Check jump
-        if (Input.GetButtonDown("Jump") && !isJumping)
+        if (Input.GetButtonDown("Jump") && ( isGrounded || isOnLeftWall || isOnRightWall ))
         {
             wantsJumping = true;
         }
@@ -66,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
             timerJump += Time.deltaTime;
             canJumpRIGHT = false;
 
-            if (timerJump > 0.5f) 
+            if (timerJump > wallJumpCD) 
             {
                 jumpedRIGHT = false;
                 canJumpRIGHT = true;
@@ -79,7 +81,7 @@ public class PlayerMovement : MonoBehaviour
             timerJump += Time.deltaTime;
             canJumpLEFT = false;
 
-            if (timerJump > 0.5f)
+            if (timerJump > wallJumpCD)
             {
                 jumpedLEFT = false;
                 canJumpLEFT = true;
@@ -103,12 +105,12 @@ public class PlayerMovement : MonoBehaviour
 
         Vector2 zeroY = new Vector2(rb.velocity.x, 0);
         Debug.Log(zeroY);
+        Debug.Log(rb.velocity);
 
         if (canClimb)
         {
             rb.velocity = zeroY;
             Vector2 dir = new Vector2(0f, (Input.GetAxis("Vertical")) / 10 );
-            Debug.Log(dir);
             transform.Translate(dir);
 
         }
@@ -151,7 +153,7 @@ public class PlayerMovement : MonoBehaviour
 // Move player function
     void MovePlayer(float _horizontalMovement)
     {
-        if ((!isOnRightWall && !isOnLeftWall) || isGrounded )
+        if ((!isOnRightWall && !isOnLeftWall) || canClimb || isGrounded )
         {
             Vector3 targetVelocity = new Vector2(_horizontalMovement, rb.velocity.y);
             rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref velocity, .05f);
@@ -192,13 +194,18 @@ public class PlayerMovement : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.transform.CompareTag("Climb"))
+        {
             rb.gravityScale = 0;
-        canClimb = true;
+            rb.velocity = new Vector2(rb.velocity.x, 0f);
+            canClimb = true;
+        }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.transform.CompareTag("Climb"))
+        {
             rb.gravityScale = baseGravityScale;
-        canClimb = false;
+            canClimb = false;
+        }
     }
 }
