@@ -16,7 +16,7 @@ using UnityEngine;
 
 public class Enemy_Patrol : MonoBehaviour
 {
-    private bool canWalk = true;
+    public bool canWalk = true;
 
     public float speed;
     public Transform[] waypoints;
@@ -46,7 +46,10 @@ public class Enemy_Patrol : MonoBehaviour
                 graphics.flipX = !graphics.flipX;
             }
         }
-        
+        else
+        {
+            GetComponent<Animator>().SetInteger("isDead", 1);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

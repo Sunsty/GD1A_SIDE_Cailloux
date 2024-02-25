@@ -122,7 +122,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectToDestroy: {fileID: 6905484075267898018}
-  animator: {fileID: 6332040078211025391}
+  graphics: {fileID: 2163970422982213235}
+  hitBox: {fileID: 439074483419581511}
 --- !u!1 &4439760308822890394
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,6 +301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd09e8dca0a35a459e593dc08a44009, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canWalk: 1
   speed: 1
   waypoints:
   - {fileID: 6629899897359769219}
@@ -452,4 +454,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectToDestroy: {fileID: 6905484075267898018}
-  animator: {fileID: 6332040078211025391}
+  graphics: {fileID: 2163970422982213235}
+  hitBox: {fileID: 439074483419581511}

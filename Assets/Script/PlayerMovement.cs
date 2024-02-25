@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -38,6 +39,7 @@ public class PlayerMovement : MonoBehaviour
 
     public float vertical;
 
+    public bool dead = false;
 
     public Transform groundCheckLeft;
     public Transform groundCheckRight;
@@ -59,7 +61,7 @@ public class PlayerMovement : MonoBehaviour
         vertical = Input.GetAxis("Vertical");
 
 // Check jump
-        if (Input.GetButtonDown("Jump") && ( isGrounded || isOnLeftWall || isOnRightWall ))
+        if (Input.GetButtonDown("Jump") && ( isGrounded || isOnLeftWall || isOnRightWall ) && !dead)
         {
             wantsJumping = true;
         }
@@ -105,8 +107,6 @@ public class PlayerMovement : MonoBehaviour
 // Wall climb
 
         Vector2 zeroY = new Vector2(rb.velocity.x, 0);
-        Debug.Log(zeroY);
-        Debug.Log(rb.velocity);
 
         if (canClimb)
         {
@@ -155,8 +155,11 @@ public class PlayerMovement : MonoBehaviour
     void MovePlayer(float _horizontalMovement)
     {
         
-        Vector3 targetVelocity = new Vector2(_horizontalMovement, rb.velocity.y);
-        rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref velocity, .05f);
+        if (!dead) 
+        { 
+            Vector3 targetVelocity = new Vector2(_horizontalMovement, rb.velocity.y);
+            rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref velocity, .05f);
+        }
         
 
         if (isJumping)
@@ -190,6 +193,17 @@ public class PlayerMovement : MonoBehaviour
         {
             spriteRenderer.flipX = true;
         }
+    }
+
+    public void Die()
+    {
+        dead = true;
+        rb.velocity = Vector2.zero;
+    }
+
+    public void Live() 
+    { 
+        dead = false; 
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

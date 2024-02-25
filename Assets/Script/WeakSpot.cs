@@ -5,7 +5,6 @@ public class WeakSpot : MonoBehaviour
 {
     public GameObject objectToDestroy;
     public Enemy_Patrol graphics;
-    public Animator animator;
     public Collider2D hitBox;
 
     private float timer = 0f;
@@ -15,7 +14,7 @@ public class WeakSpot : MonoBehaviour
         if (timerOn)
         {
             timer += Time.deltaTime;
-            if (timer > 2f)
+            if (timer > 3f)
             {
                 Destroy(objectToDestroy);
                 timerOn = false;
@@ -28,7 +27,6 @@ public class WeakSpot : MonoBehaviour
         {
             graphics.StopWalk();
             timerOn = true;
-            animator.SetBool("isDead", true);
             hitBox.enabled = false;
         }
     }
