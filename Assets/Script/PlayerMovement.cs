@@ -7,7 +7,7 @@ using UnityEngine;
 /// 
 /// - A regler :
 /// 
-///     Climb qui fait l'ascenseur : Vecteur translate "dir" pas en cause
+///
 /// 
 /// 
 /// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -28,12 +28,13 @@ public class PlayerMovement : MonoBehaviour
     private bool isJumpingRIGHT;
     public bool isOnLeftWall;
     private bool isJumpingLEFT;
-    public float timerJump = 0f;
-    public bool jumpedRIGHT = false;
-    public bool jumpedLEFT = false;
-    public bool canJumpRIGHT = true;
-    public bool canJumpLEFT = true;
+    private float timerJump = 0f;
+    private bool jumpedRIGHT = false;
+    private bool jumpedLEFT = false;
+    private bool canJumpRIGHT = true;
+    private bool canJumpLEFT = true;
     public bool canClimb = false;
+    public bool hasClimbPower = false;
 
     public float vertical;
 
@@ -153,11 +154,10 @@ public class PlayerMovement : MonoBehaviour
 // Move player function
     void MovePlayer(float _horizontalMovement)
     {
-        if ((!isOnRightWall && !isOnLeftWall) || canClimb || isGrounded )
-        {
-            Vector3 targetVelocity = new Vector2(_horizontalMovement, rb.velocity.y);
-            rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref velocity, .05f);
-        }
+        
+        Vector3 targetVelocity = new Vector2(_horizontalMovement, rb.velocity.y);
+        rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref velocity, .05f);
+        
 
         if (isJumping)
         {
@@ -193,16 +193,22 @@ public class PlayerMovement : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.transform.CompareTag("Climb"))
+        if (collision.transform.CompareTag("Climb") && hasClimbPower )
         {
             rb.gravityScale = 0;
             rb.velocity = new Vector2(rb.velocity.x, 0f);
             canClimb = true;
         }
+
+        if (collision.transform.CompareTag("Collectible"))
+        {
+            hasClimbPower = true;
+            Destroy(collision.gameObject);
+        }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.transform.CompareTag("Climb"))
+        if (collision.transform.CompareTag("Climb") && hasClimbPower)
         {
             rb.gravityScale = baseGravityScale;
             canClimb = false;
