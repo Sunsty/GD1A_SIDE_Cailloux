@@ -17,7 +17,6 @@ public class HealthBar : MonoBehaviour
     public void SetHealth(int  health)
     {
         float healthAmount = TranslateScale(health);
-        Debug.Log(healthAmount);
         fill.transform.localScale = new Vector3(healthAmount, baseScale[1], baseScale[2]);
     }
     private float TranslateScale(int health)

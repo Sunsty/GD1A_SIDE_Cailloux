@@ -19,8 +19,6 @@ public class Platform_Patrol : MonoBehaviour
     public float speed;
     public Transform[] waypoints;
 
-    public SpriteRenderer graphics;
-
     private Transform target;
     private int destPoint;
     private bool canMove = true;

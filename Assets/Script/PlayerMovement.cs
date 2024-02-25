@@ -217,7 +217,7 @@ public class PlayerMovement : MonoBehaviour
         if (collision.transform.CompareTag("Collectible"))
         {
             hasClimbPower = true;
-            Destroy(collision.gameObject);
+            Destroy(collision.transform.parent.gameObject);
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
