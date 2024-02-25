@@ -50,7 +50,7 @@ public class Platform_Patrol : MonoBehaviour
             transform.Translate(dir.normalized * speed * Time.deltaTime, Space.World);
         }
 
-        if (Vector2.Distance(transform.position, target.position) < 0.3f)
+        if (Vector2.Distance(transform.position, target.position) < 0.05f)
         {
             destPoint = (destPoint + 1) % waypoints.Length;
             target = waypoints[destPoint];
