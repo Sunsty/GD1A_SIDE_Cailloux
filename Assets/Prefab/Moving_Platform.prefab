@@ -107,7 +107,6 @@ GameObject:
   - component: {fileID: 2266812360722590562}
   - component: {fileID: 1077119583427624954}
   - component: {fileID: 6034767429943521967}
-  - component: {fileID: 1737490626638502994}
   - component: {fileID: 6638816837303641500}
   m_Layer: 0
   m_Name: Graphics
@@ -228,27 +227,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.0220726, y: 1.0028927}
   m_EdgeRadius: 0
---- !u!95 &1737490626638502994
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6054221185736177454}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 12174361ebf1b3145b7c69f6ffcdcb96, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &6638816837303641500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -265,4 +243,3 @@ MonoBehaviour:
   waypoints:
   - {fileID: 6281190061507836712}
   - {fileID: 8890599781335748378}
-  graphics: {fileID: 1077119583427624954}
